@@ -12,7 +12,7 @@ NANDA_DOMAIN_LABEL = {
 }
 
 # 1. Merge cluster info
-cluster_info = df[['subject_id', 'Preop_clustering_2']].drop_duplicates()
+cluster_info = df[['subject_id', 'Preop_clustering']].drop_duplicates()
 pivot_with_cluster = pivot_prop.merge(cluster_info, on='subject_id', how='left')
 
 # 2. Set plot style and colors
@@ -23,7 +23,7 @@ palette = sns.color_palette("Set1", n_colors=len(NANDA_DOMAIN_LABEL))
 color_map = dict(zip(sorted(NANDA_DOMAIN_LABEL.keys()), palette))
 
 # 3. Create subplots for each cluster
-groups = sorted(pivot_with_cluster['Preop_clustering_2'].unique())
+groups = sorted(pivot_with_cluster['Preop_clustering'].unique())
 fig, axes = plt.subplots(1, len(groups), figsize=(18, 7), sharey=True)
 
 day_axis = range(-3, 8)
@@ -32,7 +32,7 @@ domain_cols = sorted(NANDA_DOMAIN_LABEL.keys())
 
 for i, group in enumerate(groups):
     ax = axes[i]
-    group_data = pivot_with_cluster[pivot_with_cluster['Preop_clustering_2'] == group]
+    group_data = pivot_with_cluster[pivot_with_cluster['Preop_clustering'] == group]
 
     # Calculate daily mean proportions
     plot_data = group_data.groupby('day_diff')[domain_cols].mean().reindex(day_axis).fillna(0)
